@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/header";
 import ScrollTop from "@/components/scrollTop";
 import { SearchProvider } from "@/components/provider";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +20,9 @@ export default function RootLayout({ children, pageProps }) {
     <html lang="pt-br">
       <body className={inter.className}>
         <SearchProvider>
-          <Header/>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Header/>
+          </Suspense>
           <div {...pageProps}>
             {children}
           </div>
