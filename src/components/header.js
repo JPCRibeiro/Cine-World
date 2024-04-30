@@ -1,6 +1,6 @@
 "use client"
 import { Bungee } from "next/font/google";
-import { IoSearchOutline, IoCloseOutline } from "react-icons/io5";
+import { IoSearchOutline } from "react-icons/io5";
 import { IoEarth } from "react-icons/io5";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -9,14 +9,15 @@ import { useSearch } from "./provider";
 
 const bungee = Bungee({ subsets: ["latin"], weight: ['400'] });
 
-export default function Header({  }) {
+export default function Header() {
   const { searchText, setSearchText, clearSearchText, isInputVisible, setInputVisible } = useSearch();
   const [isScrolled, setIsScrolled] = useState(false);
   const [activePage, setActivePage] = useState(false);
   const searchInputRef = useRef(null);
+  const searchContainerRef = useRef(null); 
   const router = useRouter();
   const pathName = usePathname();
-  
+
   function handleChange(e) {
     setSearchText(e.target.value);
   }
@@ -29,14 +30,6 @@ export default function Header({  }) {
       }, 0);
     }
   }
-
-  {/*function closeSearch() {
-    setSearchText('');
-    
-    if (pathName.includes('/search')) {
-      router.back();
-    }
-  }*/}
 
   function handleKeyDown(e) {
     if (e.key === 'Enter') {
@@ -52,10 +45,25 @@ export default function Header({  }) {
 
     if (!pathName.includes('/search')) {
       router.push(`/search?query=${searchText}`);
-    } else if (pathName.includes('/search')) {
+    } else {
       router.replace(`/search?query=${searchText}`);
     }
   }
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
+        setInputVisible(false);
+        setSearchText('');
+      }
+    }
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isInputVisible]);
 
   useEffect(() => {
     if (!pathName.includes('/search')) {
@@ -70,11 +78,6 @@ export default function Header({  }) {
     } else {
       setActivePage(null);
     }
-
-    {/*if (pathName.includes('/search')) {
-      setSearchText(searchParamsText);
-      setInputVisible(true)
-    }*/}
 
     function handleScroll() {
       if (window.scrollY > 20) {
@@ -100,7 +103,7 @@ export default function Header({  }) {
           <IoEarth className="text-[30px] text-[#ff0000]"/>
         </Link>
       </div>
-      <div className="flex items-center text-[15px] gap-[15px]">
+      <div ref={searchContainerRef} className="flex items-center text-[15px] gap-[15px]">
       <ul className="flex items-center text-white gap-[10px] text-[15px]">
           <li>
             <Link onClick={clearSearchText} href="/filmes">
@@ -115,15 +118,8 @@ export default function Header({  }) {
         </ul>
         <div className="flex items-center justify-end rounded-[3px] [transition-[200ms]] pr-[5px]" style={{ border: isInputVisible ? '1px solid white' : '1px solid transparent', width: isInputVisible ? '100%' : 'min-content' }}>
           <input ref={searchInputRef} type="text" name="inputSearch" className="text-[white] p-[6px_10px_6px_10px] bg-[transparent] outline-none font-normal w-[0%] placeholder:text-[#d8d8d8] placeholder:select-none" value={searchText} onKeyDown={handleKeyDown} onChange={handleChange} placeholder="Filmes, Séries e Atores" style={{ width: isInputVisible ? '100%' : '0%', transition: '200ms', padding: isInputVisible ? '6px 10px 6px 10px' : '0px' }}/>
-          <IoSearchOutline className="text-[28px] cursor-pointer min-w-[28px] select-none" onClick={isInputVisible ? handleSearch : handleExpandInput}/>
+          <IoSearchOutline className="text-[28px] cursor-pointer min-w-[28px] select-none search-icon" onClick={isInputVisible ? handleSearch : handleExpandInput}/>
         </div>
-        {/*<div className="flex items-center justify-end rounded-[3px] pr-[5px] [transition-[200ms]]" style={{ border: isInputVisible ? '1px solid white' : '0', marginRight: isInputVisible ? '20px' : '20px' }}>
-          <input ref={searchInputRef} type="text" name="inputSearch" className="text-[white] p-[6px_10px_6px_10px] bg-[transparent] outline-none font-normal w-[0%] placeholder:text-[#d8d8d8] placeholder:select-none" value={searchText} onChange={handleChange} placeholder="Filmes, Séries e Atores" style={{ width: isInputVisible ? '100%' : '0%', transition: '200ms' }} onKeyUp={handleSearch}/>
-          {isInputVisible ? <IoCloseOutline className="text-[28px] cursor-pointer min-w-[28px] select-none" onClick={() => { handleExpandInput(); closeSearch(); }}/> : <IoSearchOutline className="text-[28px] cursor-pointer min-w-[28px] select-none" onClick={handleExpandInput}/>}
-        </div>*/}
-        {/*<Link onClick={clearInputText} href="/cadastro">
-          <span className="p-[7px_20px] bg-primary-color rounded-[5px] flex hover:bg-[#951717bd] [transition:200ms] select-none">Login</span>
-        </Link>*/}
       </div>
     </header>
   )
