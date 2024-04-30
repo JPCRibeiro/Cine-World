@@ -2,7 +2,6 @@
 import { getSearchRequest } from "@/lib/movieRequests";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useSearchParams } from 'next/navigation'
 import { Bungee } from "next/font/google";
 import Link from "next/link";
 import { useSearch } from "@/components/provider";

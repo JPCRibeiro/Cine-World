@@ -247,7 +247,7 @@ export async function getSerieReviews(id) {
 
 export async function getSearchRequest(query) {
   try {
-    const response = await fetch(`${API_URL}/search/multi?language=pt-BR&api_key=${API_KEY}&query=${query}`);
+    const response = await fetch(`${API_URL}/search/multi?language=pt-BR&query=${query}&api_key=${API_KEY}`);
     const data = await response.json();
     return data.results;
   } catch (error) {

@@ -55,6 +55,9 @@ export default function Header({  }) {
   }
 
   useEffect(() => {
+    console.log("URL query:", searchParamsText);  
+    console.log("Search Text State:", searchText);
+    
     if (pathName.includes('/filmes')) {
       setActivePage('filmes');
     } else if (pathName.includes('/series')) {
@@ -81,7 +84,7 @@ export default function Header({  }) {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [pathName]);
+  }, [searchParamsText, pathName, setSearchText, setInputVisible]);
 
   return (             
     <header className="w-full min-h-[70px] flex bg-[linear-gradient(180deg,rgba(0,0,0,0.7)_10%,transparent)] items-center px-[3%] text-white justify-between fixed z-[30] top-0"
