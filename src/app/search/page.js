@@ -9,8 +9,9 @@ import { useSearch } from "@/components/provider";
 const bungee = Bungee({ subsets: ["latin"], weight: ['400'] });
 
 export default function SearchPage({ searchParams }) {
-  const { searchText, clearSearchText } = useSearch();
+  const { clearSearchText } = useSearch();
   const [searchResults, setSearchResults] = useState([]);
+  const searchText = searchParams.query;
   const IMAGE_PATH500 = "https://image.tmdb.org/t/p/w500";
 
   useEffect(() => {

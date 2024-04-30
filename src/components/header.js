@@ -3,7 +3,6 @@ import { Bungee } from "next/font/google";
 import { IoSearchOutline, IoCloseOutline } from "react-icons/io5";
 import { IoEarth } from "react-icons/io5";
 import Link from "next/link";
-import { useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useSearch } from "./provider";
@@ -17,9 +16,7 @@ export default function Header({  }) {
   const searchInputRef = useRef(null);
   const router = useRouter();
   const pathName = usePathname();
-  const searchParamss = useSearchParams();
-  const searchParamsText = searchParamss.get('query');
-
+  
   function handleChange(e) {
     setSearchText(e.target.value);
   }
@@ -33,31 +30,39 @@ export default function Header({  }) {
     }
   }
 
-  function closeSearch() {
+  {/*function closeSearch() {
     setSearchText('');
     
     if (pathName.includes('/search')) {
       router.back();
     }
+  }*/}
+
+  function handleKeyDown(e) {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
   }
 
   function handleSearch() {
+    if (searchText.trim() === '') {
+      searchInputRef.current.focus();
+      return;
+    }
+
     if (!pathName.includes('/search')) {
       router.push(`/search?query=${searchText}`);
     } else if (pathName.includes('/search')) {
       router.replace(`/search?query=${searchText}`);
     }
-
-    if (searchText === '' && pathName.includes('/search')) {
-      setInputVisible(false);
-      router.back();
-    } 
   }
 
   useEffect(() => {
-    console.log("URL query:", searchParamsText);  
-    console.log("Search Text State:", searchText);
-    
+    if (!pathName.includes('/search')) {
+      setInputVisible(false);
+      setSearchText('');
+    }
+
     if (pathName.includes('/filmes')) {
       setActivePage('filmes');
     } else if (pathName.includes('/series')) {
@@ -66,10 +71,10 @@ export default function Header({  }) {
       setActivePage(null);
     }
 
-    if (pathName.includes('/search')) {
+    {/*if (pathName.includes('/search')) {
       setSearchText(searchParamsText);
       setInputVisible(true)
-    }
+    }*/}
 
     function handleScroll() {
       if (window.scrollY > 20) {
@@ -84,10 +89,10 @@ export default function Header({  }) {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [searchParamsText, pathName, setSearchText, setInputVisible]);
+  }, [pathName, setSearchText, setInputVisible]);
 
-  return (             
-    <header className="w-full min-h-[70px] flex bg-[linear-gradient(180deg,rgba(0,0,0,0.7)_10%,transparent)] items-center px-[3%] text-white justify-between fixed z-[30] top-0"
+  return (     
+    <header className={`w-full min-h-[70px] flex bg-[linear-gradient(180deg,rgba(0,0,0,0.7)_10%,transparent)] items-center px-[3%] text-white justify-between fixed z-[30] top-0`}
     style={{ backgroundColor: isScrolled ? '#141414' : 'transparent', transition: 'background-color 300ms' }}>
       <div className="flex items-center gap-[30px] text-white">
         <Link onClick={clearSearchText} href="/" className="text-white text-[24px] cursor-pointer font-[bungee] flex items-center gap-[5px] select-none" title="Cine World">
@@ -108,9 +113,9 @@ export default function Header({  }) {
             </Link>
           </li>
         </ul>
-        <div className="flex items-center justify-end rounded-[3px] [transition-[200ms]]" style={{ border: isInputVisible ? '1px solid white' : '0', width: isInputVisible ? '100%' : 'min-content' }}>
-          <input ref={searchInputRef} type="text" name="inputSearch" className="text-[white] p-[6px_10px_6px_10px] bg-[transparent] outline-none font-normal w-[0%] placeholder:text-[#d8d8d8] placeholder:select-none" value={searchText} onChange={handleChange} placeholder="Filmes, Séries e Atores" style={{ width: isInputVisible ? '100%' : '0%', transition: '200ms', padding: isInputVisible ? '6px 10px 6px 10px' : '0px' }} onKeyUp={handleSearch}/>
-          {isInputVisible ? <IoCloseOutline className="text-[28px] cursor-pointer min-w-[28px] select-none" onClick={() => { handleExpandInput(); closeSearch(); }}/> : <IoSearchOutline className="text-[28px] cursor-pointer min-w-[28px] select-none" onClick={handleExpandInput}/>}
+        <div className="flex items-center justify-end rounded-[3px] [transition-[200ms]] pr-[5px]" style={{ border: isInputVisible ? '1px solid white' : '1px solid transparent', width: isInputVisible ? '100%' : 'min-content' }}>
+          <input ref={searchInputRef} type="text" name="inputSearch" className="text-[white] p-[6px_10px_6px_10px] bg-[transparent] outline-none font-normal w-[0%] placeholder:text-[#d8d8d8] placeholder:select-none" value={searchText} onKeyDown={handleKeyDown} onChange={handleChange} placeholder="Filmes, Séries e Atores" style={{ width: isInputVisible ? '100%' : '0%', transition: '200ms', padding: isInputVisible ? '6px 10px 6px 10px' : '0px' }}/>
+          <IoSearchOutline className="text-[28px] cursor-pointer min-w-[28px] select-none" onClick={isInputVisible ? handleSearch : handleExpandInput}/>
         </div>
         {/*<div className="flex items-center justify-end rounded-[3px] pr-[5px] [transition-[200ms]]" style={{ border: isInputVisible ? '1px solid white' : '0', marginRight: isInputVisible ? '20px' : '20px' }}>
           <input ref={searchInputRef} type="text" name="inputSearch" className="text-[white] p-[6px_10px_6px_10px] bg-[transparent] outline-none font-normal w-[0%] placeholder:text-[#d8d8d8] placeholder:select-none" value={searchText} onChange={handleChange} placeholder="Filmes, Séries e Atores" style={{ width: isInputVisible ? '100%' : '0%', transition: '200ms' }} onKeyUp={handleSearch}/>
