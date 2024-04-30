@@ -1,26 +1,31 @@
-"use client";
+"use client"
+import { getMovies, getMoviesGenres, getNowPlayingMovies, getPopularMovies, getTopRatedMovies } from "@/lib/movieRequests";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Bungee } from "next/font/google";
-import { useEffect, useRef, useState } from "react";
 import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
-import { getMoviesGenres, getSeriesGenres, getTrending } from "@/lib/movieRequests";
+import Slider from "@/components/slider";
 
 const bungee = Bungee({ subsets: ["latin"], weight: ['400'] });
 
-export default function HomePage() {
+export default function MoviesPage() {
   const sliderRef = useRef(null);
   const carouselRef = useRef(null);
   const [direction, setDirection] = useState(-1);
   const [trendings, setTrendings] = useState([]);
   const [moviesGenres, setMoviesGenres] = useState([]);
-  const [seriesGenres, setSeriesGenres] = useState([]);
+  const [topRatedMovies, setTopRatedMovies] = useState([]);
+  const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
+  const [popularMovies, setPopularMovies] = useState([]);
   const [width, setWidth] = useState(0); 
   const [isUserInteracting, setIsUserInteracting] = useState(false);
   const IMAGE_PATH = "https://image.tmdb.org/t/p/original";
 
   useEffect(() => {
+    document.title = `Filmes - Cine World`;
+
     async function handleTrendings() {
-      const results = await getTrending();
+      const results = await getMovies();
       setTrendings(results);
     }
 
@@ -29,14 +34,31 @@ export default function HomePage() {
       setMoviesGenres(moviesGenres);
     }
 
-    async function handleSeriesGenres() {
-      const seriesGenres = await getSeriesGenres();
-      setSeriesGenres(seriesGenres);
+    async function handleNowPlayingMovies() {
+      const nowPlayingMovies = await getNowPlayingMovies();
+      setNowPlayingMovies(nowPlayingMovies)
+    }
+
+    async function handleTopRatedMovies() {
+      const topRatedMovies = await getTopRatedMovies();
+      setTopRatedMovies(topRatedMovies);
+    }
+
+    async function handleNowPlayingMovies() {
+      const nowPlayingMovies = await getNowPlayingMovies();
+      setNowPlayingMovies(nowPlayingMovies)
+    }
+
+    async function handlePopularMovies() {
+      const popularMovies = await getPopularMovies();
+      setPopularMovies(popularMovies);
     }
 
     handleTrendings();  
     handleMoviesGenres();
-    handleSeriesGenres();
+    handleNowPlayingMovies();
+    handleTopRatedMovies();
+    handlePopularMovies();
   }, []);
 
   function handlePrevClick() {
@@ -110,12 +132,12 @@ export default function HomePage() {
   
     return () => clearInterval(interval);
   }, [handleNextClick]);
-  
+
   return (
-      <>
-        <main>
-          <div ref={carouselRef} className="flex z-9 justify-start overflow-hidden w-full relative">
-            <ol ref={sliderRef} className="flex shrink-0 relative [transition:200ms_ease-out] overflow-hidden h-[100svh]" onTransitionEnd={handleTransitionEnd}>
+    <>
+      <main>
+          <section ref={carouselRef} className="flex z-9 justify-start overflow-hidden w-full relative before:w-full before:h-[30%] before:z-10 before:absolute before:bottom-0 before:left-0 before:pointer-events-none before:bg-[linear-gradient(to_top,#141414,rgba(0,0,0,0))]">
+            <ol ref={sliderRef} className="flex shrink-0 relative [transition:200ms_ease-out] overflow-hidden " onTransitionEnd={handleTransitionEnd}>
               {trendings.map((trending, index) => (
                 <li key={index} className="flex relative h-full w-full overflow-hidden">
                   <div style={{ backgroundImage: `url(${IMAGE_PATH}${trending.backdrop_path})`, width: width }} className="flex media1200:pt-[45%] media900:pt-[60%] media600:pt-[80%] media0:pt-[130%] bg-cover bg-[center_top]"></div>
@@ -124,27 +146,18 @@ export default function HomePage() {
                     <div className="text-white flex flex-col justify-center gap-[20px] relative z-20 media1200:w-[40%] media900:w-[50%] media600:w-[unset]">
                       <h2 className="select-none text-[2.125rem] media1200:text-[40px] media900:text-[2rem] media0:text-[2rem]">
                         <span className={bungee.className}>
-                          {trending.media_type === 'movie' ? trending.title : trending.name}
-                          <span className="text-primary-color">.</span>
+                          {trending.title}
                         </span>
                       </h2>
                       <div className="flex items-center gap-[10px] select-none">
                         {[...trending.genre_ids].splice(0, 2).map((genreId, index) => (
                           <div key={index} className="p-[5px_15px] rounded-[20px] w-fit text-[14px] font-[600] border-[3px] border-primary-color bg-primary-color">
-                            {trending.media_type === 'movie' ? (
-                              <>
-                                {moviesGenres.find(e => e.id === genreId) && moviesGenres.find(e => e.id === genreId).name}
-                              </>
-                            ) : (
-                              <>
-                                {seriesGenres.find(e => e.id === genreId) && seriesGenres.find(e => e.id === genreId).name}
-                              </>
-                            )}
+                            {moviesGenres.find(e => e.id === genreId) && moviesGenres.find(e => e.id === genreId).name}
                           </div>
                         ))}
                       </div>
                       {trending.overview && <p className="select-none line-clamp-4 text-[18px]">{trending.overview}</p>}
-                      <Link href={`/${trending.media_type === 'movie' ? 'filmes' : 'series'}/${trending.id}`} className="z-[12] flex p-[10px_20px] bg-primary-color rounded-[5px] w-fit font-[500] mt-[5px] items-center gap-[10px] hover:bg-[#951717bd] [transition:200ms] hover:text-[#ffffff]">
+                      <Link href={`/filmes/${trending.id}`} className="z-[12] flex p-[10px_20px] bg-primary-color rounded-[5px] w-fit font-[500] mt-[5px] items-center gap-[10px] hover:bg-[#951717bd] [transition:200ms] hover:text-[#ffffff]">
                         <span className="text-[18px] select-none">Mais detalhes</span>
                       </Link>
                     </div>
@@ -162,12 +175,13 @@ export default function HomePage() {
                 </button>
               </div>
             </div>
-          </div>
+          </section>
+          <section className="max-w-[1240px] m-[100px_auto] px-[20px] flex flex-col gap-[40px]">
+            <Slider medias={topRatedMovies} mediaType='filmes' title='Filmes Mais Bem Avaliados'/>
+            <Slider medias={popularMovies} mediaType='filmes' title='Filmes Populares'/>
+            <Slider medias={nowPlayingMovies} mediaType='filmes' title='Em Cartaz'/>
+          </section>
         </main>
-      </>
-  );
+    </>
+  )
 }
-
-/*
-before:w-full before:h-[30%] before:z-10 before:absolute before:bottom-0 before:left-0 before:pointer-events-none before:bg-[linear-gradient(to_top,#141414,rgba(0,0,0,0))]
-*/

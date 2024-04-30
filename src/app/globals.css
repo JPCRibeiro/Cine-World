@@ -2,32 +2,86 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+::-webkit-scrollbar {
+  width: 14px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #951717ce;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--primary-color);
+}
+
+::-webkit-scrollbar-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: no-repeat var(--secondary-color);
+  background-size: 10px;
+  background-position: center bottom;
+}
+
+::-webkit-scrollbar-button:vertical:decrement {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='125' height='125' fill='rgb(171, 171, 171)'><polygon points='0,50 100,50 50,0'/></svg>");
+}
+
+::-webkit-scrollbar-button:vertical:increment {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='125' height='125' fill='rgb(171, 171, 171)'><polygon points='0,0 100,0 50,50'/></svg>");
+}
+
+:root {
+  --primary-color: #951717;
+  --secondary-color: #141414;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  @apply bg-[#141414] text-[white];
+}
+
+img {
+  @apply select-none;
+  -webkit-user-drag: none;
+}
+
+h2 {
+  @apply font-bold;
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
+  .no-scrollbar {
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  
+}
+}
+
+.nav-active {
+  @apply relative;
+}
+
+.nav-active::after {
+  @apply content-[""] bg-[red] absolute left-[0] bottom-[-5px] w-[100%] h-[3px] scale-x-100 flex;
+}
+
+.nav-link {
+  @apply relative;
+}
+.nav-link::after {
+  @apply content-[""] bg-[red] absolute left-[0] bottom-[-5px] w-[100%] h-[3px] scale-x-[0] origin-right [transition:transform_300ms] flex;
+}
+
+.nav-link:hover::after {
+  @apply scale-x-100 origin-left;
 }
