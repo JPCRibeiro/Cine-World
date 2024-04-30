@@ -33,11 +33,6 @@ export default function Header({  }) {
     }
   }
 
-  function clearInputText() {
-    setSearchText('');
-    setInputVisible(false);
-  }
-
   function closeSearch() {
     setSearchText('');
     

@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { Bungee } from "next/font/google";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, Suspense } from "react";
 import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
 import { getMoviesGenres, getSeriesGenres, getTrending } from "@/lib/movieRequests";
 
@@ -112,7 +112,7 @@ export default function HomePage() {
   }, [handleNextClick]);
   
   return (
-      <>
+      <Suspense fallback={<div>Loading...</div>}>
         <main>
           <div ref={carouselRef} className="flex z-9 justify-start overflow-hidden w-full relative">
             <ol ref={sliderRef} className="flex shrink-0 relative [transition:200ms_ease-out] overflow-hidden h-[100svh]" onTransitionEnd={handleTransitionEnd}>
@@ -164,7 +164,7 @@ export default function HomePage() {
             </div>
           </div>
         </main>
-      </>
+      </Suspense>
   );
 }
 

@@ -13,8 +13,6 @@ export default function SearchPage({ searchParams }) {
   const { searchText, clearSearchText } = useSearch();
   const [searchResults, setSearchResults] = useState([]);
   const IMAGE_PATH500 = "https://image.tmdb.org/t/p/w500";
-  const queryParams = useSearchParams();
-  //const searchText = queryParams.get('query');
 
   useEffect(() => {
     async function handleSearchResults(query) {
