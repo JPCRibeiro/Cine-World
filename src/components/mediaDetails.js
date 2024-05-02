@@ -15,9 +15,10 @@ export default function MediaDetails({ mediasDetails, genres, mediasElenco }) {
   
   return(
     <>
-      <div className="flex gap-[40px] justify-center">
-        <Image priority={true} width="333" height="500" loader={imgLoader} src={`${IMAGE_PATH}${mediasDetails.poster_path}`} alt={`${mediasDetails.title || mediasDetails.name}`} className="rounded-[10px] h-[500px] w-[auto] object-cover"/>
+      <div className="flex gap-[40px] justify-center max-media768:flex-col">
+        <Image priority={true} width="333" height="500" loader={imgLoader} src={`${IMAGE_PATH}${mediasDetails.poster_path}`} alt={`${mediasDetails.title || mediasDetails.name}`} className="rounded-[10px] h-[500px] w-[333px] object-cover max-media768:m-[0_auto] max-media768:object-fill"/>
         <div className="flex flex-col gap-[20px] overflow-hidden">
+          <div className="flex flex-col gap-[20px] max-media768:items-center max-media768:text-center">
           <div>
             <h2 className="text-[34px] text-[white]">
               <span className={bungee.className}>
@@ -53,6 +54,7 @@ export default function MediaDetails({ mediasDetails, genres, mediasElenco }) {
           </div>
           )}
           {mediasDetails.overview && <p>{mediasDetails.overview}</p>}
+          </div>
           <Slider mediaType={'atores'} medias={mediasElenco} title={'Elenco'}/>
         </div>
       </div>

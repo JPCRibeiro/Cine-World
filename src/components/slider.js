@@ -76,7 +76,7 @@ export default function Slider({ medias, title, mediaType }) {
                 <IoChevronBackSharp className="self-center text-[40px] h-auto [transition:transform_.1s_ease-out_0s] hidden group-hover/show:block group-hover/scale:scale-125"/>
               </div>
               <div className="overflow-x-hidden relative">
-                <div ref={sliderRef} className="flex rounded-[0.2vw] w-full h-full overflow-x-scroll overflow-y-hidden gap-[0.3vw] scroll-smooth scrollbar-hide no-scrollbar relative">
+                <div ref={sliderRef} className="flex rounded-[3px] w-full h-full overflow-x-scroll overflow-y-hidden gap-[5px] scroll-smooth scrollbar-hide no-scrollbar relative">
                   {medias.map((media, index) => (
                     (mediaType === 'atores' && media.profile_path && media.known_for_department === "Acting") || (media.poster_path) ? (
                       <div key={index} className={`relative group/movieInfo h-full flex-shrink-0 ${mediaType === 'atores' ? 'h-[200px] w-[140px]' : 'h-[300px] w-[200px]'}`}>
@@ -84,7 +84,7 @@ export default function Slider({ medias, title, mediaType }) {
                           <div className="relative">
                             <Image 
                               loader={imgLoader} 
-                              className={`object-cover rounded-[0.2vw] ${mediaType === 'atores' ? 'h-[200px] w-[140px]' : 'h-[300px] w-[200px]'}`} 
+                              className={`object-cover rounded-[3px] ${mediaType === 'atores' ? 'h-[200px] w-[140px]' : 'h-[300px] w-[200px]'}`} 
                               src={`${IMAGE_PATH}${mediaType === 'atores' ? media.profile_path : media.poster_path}`} 
                               alt={media.name || media.title}
                               width={mediaType === 'atores' ? 150 : 200} 

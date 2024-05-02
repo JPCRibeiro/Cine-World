@@ -33,18 +33,18 @@ export default function SearchPage({ searchParams }) {
         <div className="flex gap-[40px] flex-col">
           {searchResults.length > 0 ? (
             <>
-              <h2 className="text-[30px] text-[white]">
-                <span className={bungee.className}>
+              <h2 className="text-[30px] max-media768:text-[26px] text-[white]">
+                <p className={`${bungee.className}`}>
                   Resultados para {`"${searchText}"`}
-                </span>
+                </p>
               </h2>
-              <div className="flex flex-wrap gap-[0.3vw]">
+              <div className="flex flex-wrap gap-[5px] justify-center">
                 {searchResults.map((searchResult, index) => (
                   searchResult.profile_path || searchResult.poster_path ? (
                     <div key={index} className="flex relative group/searchInfo">
                       <Link onClick={clearSearchText} href={`/${searchResult.media_type === 'tv' ? 'series' : searchResult.media_type === 'movie' ? 'filmes' : 'atores'}/${searchResult.id}`}> 
-                        <Image loader={imgLoader} className="flex w-[200px] h-[300px] rounded-[0.2vw]" src={`${IMAGE_PATH500}${searchResult.poster_path || searchResult.profile_path}`} alt={searchResult.title || searchResult.name} width="200" height="300"/>
-                        <div className="[transition:all_0.3s_ease_0s] w-full h-full absolute top-0 left-0 opacity-[0] group-hover/searchInfo:opacity-100 bg-[linear-gradient(to_top,_rgb(0,_0,_0)_12%,_rgba(0,_0,_0,_0))] rounded-[0.2vw]"></div>
+                        <Image priority={true} loader={imgLoader} className="flex w-[200px] h-full max-h-[300px] max-media768:w-[250px] max-media768:max-h-[365px] rounded-[3px]" src={`${IMAGE_PATH500}${searchResult.poster_path || searchResult.profile_path}`} alt={searchResult.title || searchResult.name} width="200" height="300"/>
+                        <div className="[transition:all_0.3s_ease_0s] w-full h-full absolute top-0 left-0 opacity-[0] group-hover/searchInfo:opacity-100 bg-[linear-gradient(to_top,_rgb(0,_0,_0)_12%,_rgba(0,_0,_0,_0))] rounded-[3px]"></div>
                         <div className="text-center font-bold p-[0_10px_20px] flex justify-center items-center absolute bottom-[-20px] group-hover/searchInfo:bottom-[0px] [transition:all_0.3s_ease_0s] opacity-[0] group-hover/searchInfo:opacity-100 w-full h-max">
                           <p className={bungee.className}>{searchResult.title || searchResult.name}</p>
                         </div>
