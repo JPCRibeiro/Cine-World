@@ -51,16 +51,18 @@ export default function ActorPage({params}) {
   return (
     <ActorLayout actorDetails={actorDetails.name ? actorDetails.name : 'Página não encontrada - Cine World'}>
       <main className="max-w-[1240px] m-[100px_auto] px-[20px] flex flex-col gap-[40px]">
-        <div className="flex gap-[40px] justify-center">
-          <Image priority={true} width="300" height="500" loader={imgLoader} src={`${IMAGE_PATH}${actorDetails.profile_path}`} alt={`Filme ${actorDetails.name}`} className="rounded-[10px] h-[500px] object-cover"/>
+        <div className="flex gap-[40px] justify-center max-media768:flex-col">
+          <Image priority={true} width="300" height="500" loader={imgLoader} src={`${IMAGE_PATH}${actorDetails.profile_path}`} alt={`Filme ${actorDetails.name}`} className="rounded-[10px] h-[500px] object-cover max-media768:m-[0_auto]"/>
           <div className="overflow-x-hidden flex flex-col gap-[20px]">
-            <h2 className="text-[40px] text-[white]">
-              <span className={bungee.className}>
-                {actorDetails.name}
-              </span>   
-            </h2>
-            {actorDetails.place_of_birth && <p className="flex gap-[5px] items-baseline"><RiMapPin2Line size={21}/>{actorDetails.place_of_birth}</p>}
-            {actorDetails.biography && <p className="line-clamp-[10]">{actorDetails.biography}</p>}
+            <div className="max-media768:flex max-media768:flex-col max-media768:items-center max-media768:text-center max-media768:gap-[20px]">
+              <h2 className="text-[40px] text-[white]">
+                <span className={bungee.className}>
+                  {actorDetails.name}
+                </span>   
+              </h2>
+              {actorDetails.place_of_birth && <p className="flex gap-[5px] items-baseline"><RiMapPin2Line size={21}/>{actorDetails.place_of_birth}</p>}
+              {actorDetails.biography && <p className="line-clamp-[10]">{actorDetails.biography}</p>}
+            </div>
             <Slider mediaType={'filmes'} medias={actorMovies} title={'Filmes e Séries'}/>
           </div>
         </div>
