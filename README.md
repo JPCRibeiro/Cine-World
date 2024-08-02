@@ -15,5 +15,5 @@
 </div>
 
 <div align="center">
-  Acesse o <a align='center' href="https://jpcribeiro.github.io/Amazon-Clone/" target="_blank">Projeto</a>
+  Acesse o <a align='center' href="https://cine-world-jpcribeiro.vercel.app" target="_blank">Projeto</a>
 </div>
