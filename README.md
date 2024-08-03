@@ -1,5 +1,5 @@
 <div align='center'>
-  <a align='center' href="https://cine-world-jpcribeiro.vercel.app" target="blank"><img align="center" src="public/cine-logo.svg" height="100" /></a>
+  <a align='center' href="https://cine-world-jpcribeiro.vercel.app" target="blank"><img align="center" src="public/cine-logo.svg" height="80" /></a>
 </div>
 
 <h1 align='center'>
